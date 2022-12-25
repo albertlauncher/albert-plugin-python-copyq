@@ -4,6 +4,8 @@
 
 Synopsis: <trigger> [filter]"""
 
+#  Copyright (c) 2022 Manuel Schneider
+
 import html
 import json
 import re
