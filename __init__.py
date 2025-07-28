@@ -12,7 +12,7 @@ md_version = "2.0"
 md_name = "CopyQ"
 md_description = "Access CopyQ clipboard"
 md_license = "BSD-2-Clause"
-md_url = "https://github.com/albertlauncher/python/tree/main/copyq"
+md_url = "https://github.com/albertlauncher/albert-plugin-python-copyq"
 md_authors = ["@ManuelSchneid3r", "@BarrensZeppelin"]
 md_bin_dependencies = ["copyq"]
 
