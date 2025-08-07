@@ -4,17 +4,20 @@
 
 import json
 import subprocess
+from platform import system
+from pathlib import Path
+from shutil import which
 
 from albert import *
 
 md_iid = "3.0"
-md_version = "2.0"
+md_version = "3.0"
 md_name = "CopyQ"
 md_description = "Access CopyQ clipboard"
 md_license = "BSD-2-Clause"
 md_url = "https://github.com/albertlauncher/albert-plugin-python-copyq"
 md_authors = ["@ManuelSchneid3r", "@BarrensZeppelin"]
-md_bin_dependencies = ["copyq"]
+md_platforms = ["Darwin", "Linux"]
 
 
 copyq_script_getAll = r"""
@@ -53,13 +56,26 @@ class Plugin(PluginInstance, TriggerQueryHandler):
         PluginInstance.__init__(self)
         TriggerQueryHandler.__init__(self)
 
+        if system() == "Darwin":
+            hardcoded_executable = Path("/Applications/CopyQ.app/Contents/MacOS/CopyQ")
+            self.executable = hardcoded_executable if hardcoded_executable.exists() else None
+            self.icon = "qfip:/Applications/CopyQ.app"
+        elif system() == "Linux":
+            self.executable = which("copyq")
+            self.icon = "xdg:copyq"
+        else:
+            raise NotImplementedError(f"Unsupported platform: {system}")
+
+        if not self.executable:
+            raise FileNotFoundError("CopyQ executable not found.")
+
     def defaultTrigger(self):
         return "cp "
 
     def handleTriggerQuery(self, query):
         items = []
         script = copyq_script_getMatches % query.string if query.string else copyq_script_getAll
-        proc = subprocess.run(["copyq", "-"], input=script.encode(), stdout=subprocess.PIPE)
+        proc = subprocess.run([self.executable, "-"], input=script.encode(), stdout=subprocess.PIPE)
         json_arr = json.loads(proc.stdout.decode())
 
         for json_obj in json_arr:
@@ -71,12 +87,12 @@ class Plugin(PluginInstance, TriggerQueryHandler):
                 text = " ".join(filter(None, text.replace("\n", " ").split(" ")))
 
             act = lambda s=script, r=row: (
-                lambda: runDetachedProcess(["copyq", s % r])
+                lambda: runDetachedProcess([self.executable, s % r])
             )
             items.append(
                 StandardItem(
                     id=self.id(),
-                    iconUrls=["xdg:copyq"],
+                    iconUrls=[self.icon],
                     text=text,
                     subtext="%s: %s" % (row, ", ".join(json_obj["mimetypes"])),
                     actions=[
