@@ -17,6 +17,7 @@ md_description = "Access CopyQ clipboard"
 md_license = "MIT"
 md_url = "https://github.com/albertlauncher/albert-plugin-python-copyq"
 md_authors = ["@ManuelSchneid3r", "@BarrensZeppelin"]
+md_maintainers = ["@BarrensZeppelin"]
 md_platforms = ["Darwin", "Linux"]
 
 
