@@ -11,7 +11,7 @@ from shutil import which
 from albert import *
 
 md_iid = "3.0"
-md_version = "3.0"
+md_version = "3.1"
 md_name = "CopyQ"
 md_description = "Access CopyQ clipboard"
 md_license = "MIT"
@@ -65,7 +65,7 @@ class Plugin(PluginInstance, TriggerQueryHandler):
             self.executable = which("copyq")
             self.icon = "xdg:copyq"
         else:
-            raise NotImplementedError(f"Unsupported platform: {system}")
+            raise NotImplementedError(f"Unsupported platform: {system()}")
 
         if not self.executable:
             raise FileNotFoundError("CopyQ executable not found.")
