@@ -10,7 +10,7 @@ from shutil import which
 
 from albert import *
 
-md_iid = "3.0"
+md_iid = "4.0"
 md_version = "3.1"
 md_name = "CopyQ"
 md_description = "Access CopyQ clipboard"
@@ -60,10 +60,10 @@ class Plugin(PluginInstance, TriggerQueryHandler):
         if system() == "Darwin":
             hardcoded_executable = Path("/Applications/CopyQ.app/Contents/MacOS/CopyQ")
             self.executable = hardcoded_executable if hardcoded_executable.exists() else None
-            self.icon = "qfip:/Applications/CopyQ.app"
+            self.icon_factory = lambda: makeFileTypeIcon("/Applications/CopyQ.app")
         elif system() == "Linux":
             self.executable = which("copyq")
-            self.icon = "xdg:copyq"
+            self.icon_factory = lambda: makeThemeIcon("copyq")
         else:
             raise NotImplementedError(f"Unsupported platform: {system()}")
 
@@ -93,7 +93,7 @@ class Plugin(PluginInstance, TriggerQueryHandler):
             items.append(
                 StandardItem(
                     id=self.id(),
-                    iconUrls=[self.icon],
+                    iconFactory=self.icon_factory,
                     text=text,
                     subtext="%s: %s" % (row, ", ".join(json_obj["mimetypes"])),
                     actions=[
