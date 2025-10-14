@@ -93,7 +93,7 @@ class Plugin(PluginInstance, TriggerQueryHandler):
             items.append(
                 StandardItem(
                     id=self.id(),
-                    iconFactory=self.icon_factory,
+                    icon_factory=self.icon_factory,
                     text=text,
                     subtext="%s: %s" % (row, ", ".join(json_obj["mimetypes"])),
                     actions=[
