@@ -10,7 +10,7 @@ from shutil import which
 
 from albert import *
 
-md_iid = "4.0"
+md_iid = "5.0"
 md_version = "3.1.1"
 md_name = "CopyQ"
 md_description = "Access CopyQ clipboard"
@@ -51,11 +51,11 @@ JSON.stringify(result);
 """
 
 
-class Plugin(PluginInstance, TriggerQueryHandler):
+class Plugin(PluginInstance, GeneratorQueryHandler):
 
     def __init__(self):
         PluginInstance.__init__(self)
-        TriggerQueryHandler.__init__(self)
+        GeneratorQueryHandler.__init__(self)
 
         if system() == "Darwin":
             hardcoded_executable = Path("/Applications/CopyQ.app/Contents/MacOS/CopyQ")
@@ -73,9 +73,9 @@ class Plugin(PluginInstance, TriggerQueryHandler):
     def defaultTrigger(self):
         return "cp "
 
-    def handleTriggerQuery(self, query):
+    def items(self, ctx):
         items = []
-        script = copyq_script_getMatches % query.string if query.string else copyq_script_getAll
+        script = copyq_script_getMatches % ctx.query if ctx.query else copyq_script_getAll
         proc = subprocess.run([self.executable, "-"], input=script.encode(), stdout=subprocess.PIPE)
         json_arr = json.loads(proc.stdout.decode())
 
@@ -104,4 +104,4 @@ class Plugin(PluginInstance, TriggerQueryHandler):
                 )
             )
 
-        query.add(items)
+        yield [items]
