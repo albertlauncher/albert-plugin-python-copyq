@@ -104,4 +104,4 @@ class Plugin(PluginInstance, GeneratorQueryHandler):
                 )
             )
 
-        yield [items]
+        yield items
