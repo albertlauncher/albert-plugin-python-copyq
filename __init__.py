@@ -60,10 +60,10 @@ class Plugin(PluginInstance, GeneratorQueryHandler):
         if system() == "Darwin":
             hardcoded_executable = Path("/Applications/CopyQ.app/Contents/MacOS/CopyQ")
             self.executable = hardcoded_executable if hardcoded_executable.exists() else None
-            self.icon_factory = lambda: makeFileTypeIcon("/Applications/CopyQ.app")
+            self.icon_factory = lambda: Icon.fileType("/Applications/CopyQ.app")
         elif system() == "Linux":
             self.executable = which("copyq")
-            self.icon_factory = lambda: makeThemeIcon("copyq")
+            self.icon_factory = lambda: Icon.theme("copyq")
         else:
             raise NotImplementedError(f"Unsupported platform: {system()}")
 
