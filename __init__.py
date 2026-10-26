@@ -11,7 +11,7 @@ from shutil import which
 from albert import *
 
 md_iid = "5.0"
-md_version = "3.1.2"
+md_version = "3.1.3"
 md_name = "CopyQ"
 md_description = "Access CopyQ clipboard"
 md_license = "MIT"
